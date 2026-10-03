@@ -1,10 +1,14 @@
 import { test, expect } from '@playwright/test';
+import { HomePage } from '../pages/HomePage';
+import { ProductPage } from '../pages/ProductPage';
 
 test('test', async ({ page }) => {
-  await page.goto('https://practicesoftwaretesting.com/');
-  await page.locator('[data-test="search-query"]').click();
-  await page.locator('[data-test="search-query"]').fill('Hammer');
-  await page.locator('[data-test="search-submit"]').click();
-  await page.locator('[data-test="product-01M40XKY2D9CP8723EC6N2V82H"]').click();
-  await expect(page.locator('[data-test="product-name"]')).toBeVisible();
+  const homePage = new HomePage(page);
+  const productPage = new ProductPage(page);
+
+  await homePage.goto();
+  await homePage.searchProduct('Hammer');
+  await homePage.openProduct('Hammer');
+
+  await expect(productPage.productName).toBeVisible();
 });

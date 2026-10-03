@@ -1,12 +1,14 @@
 import { test, expect } from '@playwright/test';
+import { HomePage } from '../pages/HomePage';
+import { LoginPage } from '../pages/LoginPage';
 
 test('test', async ({ page }) => {
-  await page.goto('https://practicesoftwaretesting.com/');
-  await page.locator('[data-test="nav-sign-in"]').click();
-  await page.locator('[data-test="email"]').click();
-  await page.locator('[data-test="email"]').fill('invalid123@gmail.com');
-  await page.locator('[data-test="password"]').click();
-  await page.locator('[data-test="password"]').fill('WrongPassword123!');
-  await page.locator('[data-test="login-submit"]').click();
-  await expect(page.getByText('Invalid email or password')).toBeVisible();
+  const homePage = new HomePage(page);
+  const loginPage = new LoginPage(page);
+
+  await homePage.goto();
+  await loginPage.open();
+  await loginPage.login('invalid123@gmail.com', 'WrongPassword123!');
+
+  await expect(loginPage.invalidCredentialsMessage).toBeVisible();
 });
